@@ -20,8 +20,22 @@ public class MoviesController : ControllerBase
     {
         var apiKey = _config["Tmdb:ApiKey"];
         var client = _httpClientFactory.CreateClient();
-
         var url = $"https://api.themoviedb.org/3/movie/popular?api_key={apiKey}&language=en-US&page=1";
+        var response = await client.GetAsync(url);
+
+        if (!response.IsSuccessStatusCode)
+            return StatusCode((int)response.StatusCode, "Failed to fetch from TMDB");
+
+        var json = await response.Content.ReadAsStringAsync();
+        return Content(json, "application/json");
+    }
+
+    [HttpGet("toprated")]
+    public async Task<IActionResult> GetTopRatedMovies()
+    {
+        var apiKey = _config["Tmdb:ApiKey"];
+        var client = _httpClientFactory.CreateClient();
+        var url = $"https://api.themoviedb.org/3/movie/top_rated?api_key={apiKey}&language=en-US&page=1";
         var response = await client.GetAsync(url);
 
         if (!response.IsSuccessStatusCode)
