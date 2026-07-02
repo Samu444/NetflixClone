@@ -1,0 +1,20 @@
+/* index.css — Global styles */
+/* These styles apply to the entire page, not just one component */
+
+/* The * selector means "select every element on the page" */
+/* box-sizing: border-box means padding and borders are included in element widths */
+/* This prevents unexpected sizing bugs — always include this */
+* {
+  box-sizing: border-box;
+  margin: 0;    /* Remove default spacing around every element */
+  padding: 0;   /* Remove default inner spacing from every element */
+}
+
+/* The body is the root of the visible page */
+/* We're making it dark like Netflix */
+body {
+  background-color: #141414;  /* Very dark grey — Netflix's background colour */
+  font-family: Arial, sans-serif; /* Font for all text on the page */
+  color: white;               /* Default text colour — white on dark background */
+  min-height: 100vh;          /* vh = viewport height. 100vh = full screen height */
+}

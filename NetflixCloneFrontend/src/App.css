@@ -1,0 +1,35 @@
+/* App.css — Styles for the main App layout */
+ 
+/* Full-width app container so rows can scroll horizontally */
+.app {
+  /* Let the root app container span the viewport width.
+     Without this, child rows may inherit constrained width and appear compressed. */
+  width: 100%;
+}
+ 
+/* The navbar is the black bar at the top — like Netflix has */
+.navbar {
+  background-color: #000000;  /* Pure black for the top bar */
+  padding: 16px 24px;         /* 16px top/bottom space, 24px left/right space */
+  position: sticky;           /* Sticks to the top of the screen when you scroll */
+  top: 0;                     /* Sticks at the very top (0px from top) */
+  z-index: 10;                /* Sits above other content when scrolling */
+}
+ 
+/* The NETFLIX logo text style */
+.logo {
+  color: #e50914;             /* Netflix red */
+  font-size: 24px;            /* Size of the text */
+  font-weight: 900;           /* Very bold */
+  letter-spacing: 3px;        /* Space between each letter */
+}
+ 
+/* The main content area below the navbar */
+.main-content {
+  padding-top: 24px;
+  padding-left: 24px;          /* A little space below the navbar */
+ 
+  /* Ensure content area can host full-width horizontal rows.
+     This works with .row-cards overflow-x so cards scroll side-to-side correctly. */
+  width: 100%;
+}

@@ -1,0 +1,59 @@
+/* MovieRow.css — styles for a horizontal scrollable row of cards */
+
+/* The outer container for one row */
+.movie-row {
+  padding: 8px 24px 24px 24px; /* top right bottom left spacing around the row */
+  margin-bottom: 8px;           /* Space between rows */
+  /* Ensure each row uses full available width from its parent.
+     This prevents narrow-content collapse that can make card layout appear stacked. */
+  width: 100%;
+}
+
+/* The row heading — e.g. "Trending Now" */
+.row-title {
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 12px;  /* Space between the title and the cards below it */
+}
+
+/* The horizontal scrolling container that holds all the cards */
+.row-cards {
+  /* Use a single-axis grid that automatically places each card in the next column.
+     This guarantees a horizontal sequence without wrapping into vertical stacks. */
+  display: grid;
+
+  /* Force items to flow left-to-right in columns instead of top-to-bottom rows. */
+  grid-auto-flow: column;
+
+  /* Every auto-created card column is exactly 160px, matching the card width.
+     This keeps spacing and scrolling predictable across all screen sizes. */
+  grid-auto-columns: 160px;
+
+  /* Visible spacing between neighboring cards. */
+  gap: 12px;
+
+  /* Enable horizontal scrolling when the full card strip is wider than the viewport. */
+  overflow-x: auto;    /* If cards are too wide to fit, allow horizontal scrolling */
+
+  /* Prevent vertical scrollbar/overflow artifacts in the row strip. */
+  overflow-y: hidden;
+
+  /* Adds breathing room below cards so overlay/scroll area does not clip content. */
+  padding-bottom: 8px; /* Space below cards so scrollbar doesn't overlap them */
+
+  /* Keep the scroller aligned to the width of its parent container. */
+  width: 100%;
+
+  /* Align card tops so cards with different text heights stay visually clean. */
+  align-items: start;
+
+  /* Optional enhancement: when users scroll, cards settle naturally near snap points. */
+  scroll-snap-type: x proximity;
+}
+
+/* Hide the scrollbar visually but keep scrolling working */
+/* Users can still scroll by swiping or using the mouse wheel */
+.row-cards::-webkit-scrollbar {
+  display: none; /* Hides the scrollbar in Chrome, Edge, Safari */
+}

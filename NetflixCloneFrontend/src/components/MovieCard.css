@@ -1,0 +1,70 @@
+/* MovieCard.css — styles for the MovieCard component */
+
+/* The card container */
+.movie-card {
+  width: 160px;               /* Fixed width — all cards are the same size */
+  flex-shrink: 0;             /* Prevents the card from squishing in a row */
+  border-radius: 8px;         /* Rounds the corners — 8px is a subtle rounding */
+  overflow: hidden;           /* Hides anything that goes outside the rounded corners */
+  background-color: #1a1a1a;  /* Slightly lighter than the page — dark card colour */
+  cursor: pointer;            /* Shows a hand cursor when hovering — feels clickable */
+
+  /* transition tells the browser to animate any property changes smoothly */
+  /* "transform 0.2s" means: animate the transform property over 0.2 seconds */
+  transition: transform 0.2s;
+}
+
+/* The hover effect — this runs when the user moves their mouse over the card */
+/* :hover is called a "pseudo-class" — it targets an element in a specific state */
+.movie-card:hover {
+  /* scale(1.05) makes the card 5% bigger — creates the Netflix zoom effect */
+  transform: scale(1.05);
+}
+
+/* The poster image inside the card */
+.movie-card img {
+  width: 100%;       /* Image fills the full width of the card */
+  display: block;    /* Removes a small gap that appears under images by default */
+}
+
+/* The title text */
+.movie-title {
+  color: white;
+  font-size: 14px;
+  font-weight: 500;               /* Medium weight — not too thin, not too bold */
+  padding: 8px 8px 4px 8px;      /* top right bottom left — space inside the element */
+  margin: 0;                      /* Remove default paragraph spacing */
+}
+
+/* The genre label */
+.movie-genre {
+  color: #aaaaaa;             /* Light grey — less prominent than the title */
+  font-size: 12px;            /* Smaller than the title */
+  padding: 0px 8px 8px 8px;  /* No top padding (sits under title), 8px on other sides */
+  margin: 0;
+}
+.star-rating {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-top: 6px;
+}
+
+.star {
+  font-size: 1rem;
+  color: #555;          /* empty star */
+}
+
+.star--filled {
+  color: #e50914;       /* Netflix red for filled */
+}
+
+.star--partial {
+  color: #e5091480;     /* semi-transparent red for partial */
+}
+
+.star-value {
+  font-size: 0.75rem;
+  color: #aaa;
+  margin-left: 4px;
+}
