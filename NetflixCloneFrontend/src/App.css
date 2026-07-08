@@ -1,35 +1,200 @@
-/* App.css — Styles for the main App layout */
- 
-/* Full-width app container so rows can scroll horizontally */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #141414;
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+}
+
 .app {
-  /* Let the root app container span the viewport width.
-     Without this, child rows may inherit constrained width and appear compressed. */
   width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
- 
-/* The navbar is the black bar at the top — like Netflix has */
+
+/* Navbar */
 .navbar {
-  background-color: #000000;  /* Pure black for the top bar */
-  padding: 16px 24px;         /* 16px top/bottom space, 24px left/right space */
-  position: sticky;           /* Sticks to the top of the screen when you scroll */
-  top: 0;                     /* Sticks at the very top (0px from top) */
-  z-index: 10;                /* Sits above other content when scrolling */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 50px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 100%);
+  backdrop-filter: blur(4px);
 }
- 
-/* The NETFLIX logo text style */
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
 .logo {
-  color: #e50914;             /* Netflix red */
-  font-size: 24px;            /* Size of the text */
-  font-weight: 900;           /* Very bold */
-  letter-spacing: 3px;        /* Space between each letter */
+  color: #e50914;
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-decoration: none;
 }
- 
-/* The main content area below the navbar */
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+}
+
+.nav-links a {
+  color: #e5e5e5;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover {
+  color: #b3b3b3;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.navbar-user {
+  color: #e5e5e5;
+  font-size: 0.9rem;
+}
+
+.logout-btn {
+  background-color: #e50914;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.logout-btn:hover {
+  background-color: #c11119;
+}
+
+/* Hero Banner */
+.hero-banner {
+  position: relative;
+  height: 500px;
+  background: linear-gradient(to bottom, #141414 0%, transparent 30%, transparent 70%, #141414 100%),
+              linear-gradient(to right, rgba(0,0,0,0.8) 0%, transparent 60%),
+              url('https://image.tmdb.org/t/p/original/628Dep6AxEtDxjZoGP78TsOxYbK.jpg') center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  padding: 0 50px;
+  margin-bottom: 20px;
+}
+
+.hero-info {
+  max-width: 500px;
+}
+
+.hero-info h1 {
+  font-size: 3rem;
+  font-weight: 900;
+  margin-bottom: 16px;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+}
+
+.hero-info p {
+  font-size: 1rem;
+  color: #e5e5e5;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.hero-play-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  color: black;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.hero-play-btn:hover {
+  background: rgba(255,255,255,0.75);
+}
+
+.hero-info-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(109,109,110,0.7);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.hero-info-btn:hover {
+  background: rgba(109,109,110,0.4);
+}
+
+/* Main content */
 .main-content {
-  padding-top: 24px;
-  padding-left: 24px;          /* A little space below the navbar */
- 
-  /* Ensure content area can host full-width horizontal rows.
-     This works with .row-cards overflow-x so cards scroll side-to-side correctly. */
-  width: 100%;
+  flex: 1;
+  padding: 0 24px 40px;
+}
+
+/* Footer */
+.home-footer {
+  background: #141414;
+  border-top: 1px solid #333;
+  padding: 40px 50px;
+  color: #737373;
+}
+
+.home-footer-links {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  max-width: 700px;
+  margin-bottom: 24px;
+}
+
+.home-footer-links a {
+  color: #737373;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.home-footer-links a:hover {
+  text-decoration: underline;
+}
+
+.home-footer-bottom {
+  font-size: 0.85rem;
+  margin-top: 16px;
 }
