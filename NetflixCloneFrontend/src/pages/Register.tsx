@@ -2,34 +2,32 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
 
-function Login() {
+function Register() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     try {
-      const response = await fetch("http://localhost:5145/api/auth/login", {
+      const response = await fetch("http://localhost:5145/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ name, email, password }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const text = await response.text();
-        setError(text || "Invalid email or password.");
+        setError(typeof data === "string" ? data : "Registration failed.");
         return;
       }
 
-      const data = await response.json();
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify({ name: data.name, email: data.email }));
-      navigate("/home");
-    } catch (err) {
+      navigate("/verify-email", { state: { email } });
+    } catch {
       setError("Something went wrong. Please try again.");
-      console.error(err);
     }
   };
 
@@ -41,11 +39,17 @@ function Login() {
 
       <div className="login-body">
         <div className="login-box">
-          <h1>Sign In</h1>
+          <h1>Sign Up</h1>
           {error && <p className="login-error">{error}</p>}
           <input
+            type="text"
+            placeholder="Full Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <input
             type="email"
-            placeholder="Email or phone number"
+            placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -63,9 +67,9 @@ function Login() {
               {showPassword ? "Hide" : "Show"}
             </span>
           </div>
-          <button onClick={handleLogin}>Sign In</button>
+          <button onClick={handleRegister}>Sign Up</button>
           <p className="login-footer-text">
-            New to Netflix? <Link to="/register">Sign up now</Link>
+            Already have an account? <Link to="/login">Sign in</Link>
           </p>
         </div>
       </div>
@@ -77,12 +81,10 @@ function Login() {
           <a href="#">Help Centre</a>
           <a href="#">Terms of Use</a>
           <a href="#">Privacy</a>
-          <a href="#">Cookie Preferences</a>
-          <a href="#">Corporate Information</a>
         </div>
       </footer>
     </div>
   );
 }
 
-export default Login;
+export default Register;

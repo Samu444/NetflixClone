@@ -92,13 +92,14 @@ body {
 .hero-banner {
   position: relative;
   height: 500px;
-  background: linear-gradient(to bottom, #141414 0%, transparent 30%, transparent 70%, #141414 100%),
-              linear-gradient(to right, rgba(0,0,0,0.8) 0%, transparent 60%),
-              url('https://image.tmdb.org/t/p/original/628Dep6AxEtDxjZoGP78TsOxYbK.jpg') center/cover no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-color: #141414;
   display: flex;
   align-items: center;
   padding: 0 50px;
   margin-bottom: 20px;
+  transition: background-image 0.3s ease;
 }
 
 .hero-info {
@@ -197,4 +198,24 @@ body {
 .home-footer-bottom {
   font-size: 0.85rem;
   margin-top: 16px;
+}
+
+.watch-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  width: 100%;
+}
+
+.watch-iframe {
+  width: 100%;
+  max-width: 1100px;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
 }

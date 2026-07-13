@@ -14,6 +14,9 @@ public class MongoDbService
         SeedUsers();
     }
 
+    public IMongoCollection<Movie> Movies =>
+    _database.GetCollection<Movie>("movies");
+
     public IMongoCollection<User> Users =>
         _database.GetCollection<User>("users");
 

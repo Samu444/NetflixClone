@@ -134,3 +134,28 @@
 .login-footer-links a:hover {
   text-decoration: underline;
 }
+
+.password-field {
+  position: relative;
+  width: 100%;
+}
+
+.password-field input {
+  padding-right: 60px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #b3b3b3;
+  font-size: 0.85rem;
+  cursor: pointer;
+  user-select: none;
+  margin-top: -9px; /* offsets the margin-bottom on inputs */
+}
+
+.toggle-password:hover {
+  color: white;
+}

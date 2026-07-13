@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
+using NetflixCloneApi.Services;
 
 namespace NetflixCloneApi.Controllers;
 
@@ -6,42 +8,42 @@ namespace NetflixCloneApi.Controllers;
 [Route("api/movies")]
 public class MoviesController : ControllerBase
 {
-    private readonly IHttpClientFactory _httpClientFactory;
-    private readonly IConfiguration _config;
+    private readonly MongoDbService _mongo;
+    private readonly MovieSyncService _syncService;
 
-    public MoviesController(IHttpClientFactory httpClientFactory, IConfiguration config)
+    public MoviesController(MongoDbService mongo, MovieSyncService syncService)
     {
-        _httpClientFactory = httpClientFactory;
-        _config = config;
+        _mongo = mongo;
+        _syncService = syncService;
+    }
+
+    [HttpPost("sync")]
+    public async Task<IActionResult> SyncMovies()
+    {
+        await _syncService.SyncCategoryAsync("popular");
+        await _syncService.SyncCategoryAsync("top_rated");
+        return Ok(new { message = "Movies synced successfully" });
     }
 
     [HttpGet("popular")]
-    public async Task<IActionResult> GetPopularMovies()
+    public async Task<IActionResult> GetPopular()
     {
-        var apiKey = _config["Tmdb:ApiKey"];
-        var client = _httpClientFactory.CreateClient();
-        var url = $"https://api.themoviedb.org/3/movie/popular?api_key={apiKey}&language=en-US&page=1";
-        var response = await client.GetAsync(url);
-
-        if (!response.IsSuccessStatusCode)
-            return StatusCode((int)response.StatusCode, "Failed to fetch from TMDB");
-
-        var json = await response.Content.ReadAsStringAsync();
-        return Content(json, "application/json");
+        var movies = await _mongo.Movies.Find(m => m.Category == "popular").ToListAsync();
+        return Ok(movies);
     }
 
     [HttpGet("toprated")]
-    public async Task<IActionResult> GetTopRatedMovies()
+    public async Task<IActionResult> GetTopRated()
     {
-        var apiKey = _config["Tmdb:ApiKey"];
-        var client = _httpClientFactory.CreateClient();
-        var url = $"https://api.themoviedb.org/3/movie/top_rated?api_key={apiKey}&language=en-US&page=1";
-        var response = await client.GetAsync(url);
+        var movies = await _mongo.Movies.Find(m => m.Category == "top_rated").ToListAsync();
+        return Ok(movies);
+    }
 
-        if (!response.IsSuccessStatusCode)
-            return StatusCode((int)response.StatusCode, "Failed to fetch from TMDB");
-
-        var json = await response.Content.ReadAsStringAsync();
-        return Content(json, "application/json");
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(string id)
+    {
+        var movie = await _mongo.Movies.Find(m => m.Id == id).FirstOrDefaultAsync();
+        if (movie == null) return NotFound();
+        return Ok(movie);
     }
 }

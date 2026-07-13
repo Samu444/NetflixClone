@@ -3,6 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace NetflixCloneApi.Models;
 
+[BsonIgnoreExtraElements]
 public class User
 {
     [BsonId]
@@ -12,4 +13,8 @@ public class User
     public string Email { get; set; } = string.Empty;
     public string PasswordHash { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    public bool IsVerified { get; set; } = false;
+    public string? VerificationCode { get; set; }
+    public DateTime? VerificationCodeExpires { get; set; }
 }

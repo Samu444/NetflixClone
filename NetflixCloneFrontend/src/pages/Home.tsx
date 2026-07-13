@@ -14,11 +14,11 @@ function Home() {
   useEffect(() => {
     fetch("http://localhost:5145/api/movies/popular")
       .then((res) => res.json())
-      .then((data) => setPopular(data.results));
+      .then((data) => setPopular(data));
 
     fetch("http://localhost:5145/api/movies/toprated")
       .then((res) => res.json())
-      .then((data) => setTopRated(data.results));
+      .then((data) => setTopRated(data));
   }, []);
 
   const handleLogout = () => {
@@ -26,6 +26,9 @@ function Home() {
     localStorage.removeItem("user");
     navigate("/");
   };
+
+  // Featured movie for the hero banner = first popular movie
+  const featured = popular[0];
 
   return (
     <div className="app">
@@ -48,13 +51,40 @@ function Home() {
       </header>
 
       {/* Hero Banner */}
-      <div className="hero-banner">
+      <div
+        className="hero-banner"
+        style={
+          featured?.backdropPath
+            ? {
+                backgroundImage: `linear-gradient(to bottom, #141414 0%, transparent 30%, transparent 70%, #141414 100%), linear-gradient(to right, rgba(0,0,0,0.8) 0%, transparent 60%), url(https://image.tmdb.org/t/p/original${featured.backdropPath})`,
+              }
+            : undefined
+        }
+      >
         <div className="hero-info">
-          <h1>Trending Now</h1>
-          <p>Watch the latest and most popular movies and TV shows, updated daily.</p>
+          <h1>{featured ? featured.title : "Trending Now"}</h1>
+          <p>
+            {featured
+              ? featured.overview.length > 180
+                ? featured.overview.slice(0, 180) + "..."
+                : featured.overview
+              : "Watch the latest and most popular movies and TV shows, updated daily."}
+          </p>
           <div className="hero-buttons">
-            <button className="hero-play-btn">▶ Play</button>
-            <button className="hero-info-btn">ℹ More Info</button>
+            <button
+              className="hero-play-btn"
+              disabled={!featured}
+              onClick={() => featured && navigate(`/watch/${featured.id}`)}
+            >
+              ▶ Play
+            </button>
+            <button
+              className="hero-info-btn"
+              disabled={!featured}
+              onClick={() => featured && navigate(`/watch/${featured.id}`)}
+            >
+              ℹ More Info
+            </button>
           </div>
         </div>
       </div>
