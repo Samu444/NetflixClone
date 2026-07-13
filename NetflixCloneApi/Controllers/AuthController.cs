@@ -12,38 +12,81 @@ public class AuthController : ControllerBase
 {
     private readonly MongoDbService _mongo;
     private readonly TokenService _tokenService;
+    private readonly EmailService _emailService;
 
-    public AuthController(MongoDbService mongo, TokenService tokenService)
+    public AuthController(MongoDbService mongo, TokenService tokenService, EmailService emailService)
     {
         _mongo = mongo;
         _tokenService = tokenService;
+        _emailService = emailService;
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult<AuthResponseDto>> Register(RegisterDto dto)
+public async Task<ActionResult<RegisterResponseDto>> Register(RegisterDto dto)
+{
+    var exists = await _mongo.Users
+        .Find(u => u.Email == dto.Email)
+        .AnyAsync();
+
+    if (exists) return BadRequest("Email already exists.");
+
+    var code = new Random().Next(100000, 999999).ToString();
+
+    var user = new User
     {
-        var exists = await _mongo.Users
-            .Find(u => u.Email == dto.Email)
-            .AnyAsync();
+        Name = dto.Name,
+        Email = dto.Email,
+        PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
+        IsVerified = false,
+        VerificationCode = code,
+        VerificationCodeExpires = DateTime.UtcNow.AddMinutes(10)
+    };
 
-        if (exists) return BadRequest("Email already exists.");
+    await _mongo.Users.InsertOneAsync(user);
 
-        var user = new User
-        {
-            Name = dto.Name,
-            Email = dto.Email,
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password)
-        };
-
-        await _mongo.Users.InsertOneAsync(user);
-
-        return Ok(new AuthResponseDto
-        {
-            Token = _tokenService.CreateToken(user),
-            Name = user.Name,
-            Email = user.Email
-        });
+    try
+    {
+        await _emailService.SendVerificationEmailAsync(user.Email, user.Name, code);
     }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Email failed to send: {ex.Message}");
+        // Still log the code so testing isn't blocked if email fails
+        Console.WriteLine($"[FALLBACK] Verification code for {user.Email}: {code}");
+    }
+
+    return Ok(new RegisterResponseDto
+    {
+        Message = "Account created. Please check your email for the verification code.",
+        Email = user.Email
+    });
+}
+
+    [HttpPost("verify-email")]
+public async Task<ActionResult> VerifyEmail(VerifyEmailDto dto)
+{
+    var user = await _mongo.Users
+        .Find(u => u.Email == dto.Email)
+        .FirstOrDefaultAsync();
+
+    if (user == null) return NotFound("User not found.");
+    if (user.IsVerified) return BadRequest("Account already verified.");
+
+    if (user.VerificationCode != dto.Code)
+        return BadRequest("Invalid verification code.");
+
+    if (user.VerificationCodeExpires < DateTime.UtcNow)
+        return BadRequest("Verification code expired. Please register again.");
+
+    var update = Builders<User>.Update
+        .Set(u => u.IsVerified, true)
+        .Set(u => u.VerificationCode, (string?)null)
+        .Set(u => u.VerificationCodeExpires, (DateTime?)null);
+
+    await _mongo.Users.UpdateOneAsync(u => u.Id == user.Id, update);
+
+    return Ok(new { message = "Email verified successfully." });
+}
 
     [HttpPost("login")]
     public async Task<ActionResult<AuthResponseDto>> Login(LoginDto dto)
@@ -54,6 +97,9 @@ public class AuthController : ControllerBase
 
         if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
             return Unauthorized("Invalid email or password.");
+
+        if (!user.IsVerified)
+            return Unauthorized("Please verify your email before logging in.");
 
         return Ok(new AuthResponseDto
         {

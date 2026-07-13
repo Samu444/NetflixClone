@@ -1,5 +1,6 @@
 import type { Movie } from '../types/Movie'
 import StarRating from './StarRating'
+import { useNavigate } from 'react-router-dom'
 import './MovieCard.css'
 
 interface MovieCardProps {
@@ -7,18 +8,20 @@ interface MovieCardProps {
 }
 
 function MovieCard({ movie }: MovieCardProps) {
+  const navigate = useNavigate()
+
   return (
-    <div className="movie-card">
+    <div className="movie-card" onClick={() => navigate(`/watch/${movie.id}`)}>
       <img
-        src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+        src={movie.posterPath ? `https://image.tmdb.org/t/p/w300${movie.posterPath}` : ""}
         alt={movie.title}
       />
       <p className="movie-title">{movie.title}</p>
-      {movie.genre && (
-        <p className="movie-genre">{movie.genre}</p>
+      {movie.genres && movie.genres.length > 0 && (
+        <p className="movie-genre">{movie.genres.join(", ")}</p>
       )}
-      {movie.vote_average && (
-        <StarRating rating={movie.vote_average / 2} />
+      {movie.voteAverage > 0 && (
+        <StarRating rating={movie.voteAverage / 2} />
       )}
     </div>
   )

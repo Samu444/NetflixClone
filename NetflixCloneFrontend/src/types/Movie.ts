@@ -1,7 +1,13 @@
 export interface Movie {
-  id: number
+  id: string
+  tmdbId: number
   title: string
-  poster_path: string
-  genre?: string
-  vote_average: number
+  overview: string
+  posterPath: string
+  backdropPath: string
+  releaseDate: string
+  voteAverage: number
+  genres: string[]
+  trailerKey: string
+  category: string
 }
