@@ -63,7 +63,15 @@ function Login() {
               {showPassword ? "Hide" : "Show"}
             </span>
           </div>
+
           <button onClick={handleLogin}>Sign In</button>
+
+          <div className="forgot-password-row">
+            <Link to="/forgot-password" className="forgot-password-link">
+              Forgot password?
+            </Link>
+          </div>
+
           <p className="login-footer-text">
             New to Netflix? <Link to="/register">Sign up now</Link>
           </p>

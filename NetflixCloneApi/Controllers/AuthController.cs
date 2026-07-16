@@ -108,4 +108,61 @@ public async Task<ActionResult> VerifyEmail(VerifyEmailDto dto)
             Email = user.Email
         });
     }
+
+    [HttpPost("forgot-password")]
+public async Task<ActionResult> ForgotPassword(ForgotPasswordDto dto)
+{
+    var user = await _mongo.Users
+        .Find(u => u.Email == dto.Email)
+        .FirstOrDefaultAsync();
+
+    // Always return success even if user not found - prevents email enumeration
+    if (user == null)
+        return Ok(new { message = "If that email exists, a reset code has been sent." });
+
+    var code = new Random().Next(100000, 999999).ToString();
+
+    var update = Builders<User>.Update
+        .Set(u => u.ResetPasswordCode, code)
+        .Set(u => u.ResetPasswordCodeExpires, DateTime.UtcNow.AddMinutes(10));
+
+    await _mongo.Users.UpdateOneAsync(u => u.Id == user.Id, update);
+
+    try
+    {
+        await _emailService.SendPasswordResetEmailAsync(user.Email, user.Name, code);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Password reset email failed: {ex.Message}");
+        Console.WriteLine($"[FALLBACK] Reset code for {user.Email}: {code}");
+    }
+
+    return Ok(new { message = "If that email exists, a reset code has been sent." });
+}
+
+[HttpPost("reset-password")]
+public async Task<ActionResult> ResetPassword(ResetPasswordDto dto)
+{
+    var user = await _mongo.Users
+        .Find(u => u.Email == dto.Email)
+        .FirstOrDefaultAsync();
+
+    if (user == null) return NotFound("User not found.");
+
+    if (user.ResetPasswordCode != dto.Code)
+        return BadRequest("Invalid reset code.");
+
+    if (user.ResetPasswordCodeExpires < DateTime.UtcNow)
+        return BadRequest("Reset code expired. Please request a new one.");
+
+    var update = Builders<User>.Update
+        .Set(u => u.PasswordHash, BCrypt.Net.BCrypt.HashPassword(dto.NewPassword))
+        .Set(u => u.ResetPasswordCode, (string?)null)
+        .Set(u => u.ResetPasswordCodeExpires, (DateTime?)null);
+
+    await _mongo.Users.UpdateOneAsync(u => u.Id == user.Id, update);
+
+    return Ok(new { message = "Password reset successfully. You can now log in." });
+}
 }

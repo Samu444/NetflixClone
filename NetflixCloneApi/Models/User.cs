@@ -17,4 +17,7 @@ public class User
     public bool IsVerified { get; set; } = false;
     public string? VerificationCode { get; set; }
     public DateTime? VerificationCodeExpires { get; set; }
+
+    public string? ResetPasswordCode { get; set; }
+    public DateTime? ResetPasswordCodeExpires { get; set; }
 }
