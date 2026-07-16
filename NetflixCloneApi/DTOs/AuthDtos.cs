@@ -33,3 +33,15 @@ public class RegisterResponseDto
     // ⚠️ DEMO ONLY - remove in production, this simulates "sending" the email
     public string DemoVerificationCode { get; set; } = string.Empty;
 }
+
+public class ForgotPasswordDto
+{
+    public string Email { get; set; } = string.Empty;
+}
+
+public class ResetPasswordDto
+{
+    public string Email { get; set; } = string.Empty;
+    public string Code { get; set; } = string.Empty;
+    public string NewPassword { get; set; } = string.Empty;
+}

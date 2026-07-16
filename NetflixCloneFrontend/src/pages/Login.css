@@ -97,6 +97,7 @@
   color: #737373;
   margin-top: 20px;
   font-size: 0.95rem;
+  text-align: center;
 }
 
 .login-footer-text a {
@@ -157,5 +158,22 @@
 }
 
 .toggle-password:hover {
+  color: white;
+}
+
+.forgot-password-row {
+  text-align: center;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.forgot-password-link {
+  color: #b3b3b3;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.forgot-password-link:hover {
+  text-decoration: underline;
   color: white;
 }
