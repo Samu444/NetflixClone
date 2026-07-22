@@ -219,3 +219,139 @@ body {
   border-radius: 8px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.6);
 }
+
+/* Active nav link */
+.nav-link-active {
+  color: white !important;
+  font-weight: bold;
+}
+
+/* Icon buttons */
+.icon-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 6px 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.caret {
+  font-size: 0.7rem;
+}
+
+/* Search */
+.nav-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.nav-search-input {
+  background: rgba(0,0,0,0.75);
+  border: 1px solid #737373;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 2px;
+  font-size: 0.9rem;
+  width: 220px;
+  outline: none;
+  margin-right: 4px;
+}
+
+.search-results {
+  position: absolute;
+  top: 44px;
+  right: 0;
+  background: #141414;
+  border: 1px solid #333;
+  border-radius: 4px;
+  width: 280px;
+  max-height: 320px;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  z-index: 50;
+}
+
+.search-result-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+  color: white;
+  font-size: 0.9rem;
+}
+
+.search-result-item:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+.search-result-item img {
+  width: 32px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+.search-result-empty {
+  padding: 12px;
+  color: #737373;
+  font-size: 0.85rem;
+}
+
+/* Profile dropdown */
+.nav-profile {
+  position: relative;
+}
+
+.profile-btn {
+  border-radius: 4px;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: 44px;
+  right: 0;
+  background: rgba(0,0,0,0.9);
+  border: 1px solid #333;
+  border-radius: 4px;
+  padding: 12px 16px;
+  width: 200px;
+  z-index: 50;
+}
+
+.profile-dropdown-name {
+  color: white;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.profile-dropdown-email {
+  color: #b3b3b3;
+  font-size: 0.8rem;
+  margin-top: 2px;
+}
+
+.profile-dropdown hr {
+  border-color: #333;
+  margin: 10px 0;
+}
+
+.profile-dropdown-signout {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 6px 0;
+  width: 100%;
+  text-align: left;
+}
+
+.profile-dropdown-signout:hover {
+  text-decoration: underline;
+}

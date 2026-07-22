@@ -7,6 +7,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Home from "./pages/Home";
 import Watch from "./pages/Watch";
+import SeriesPage from "./pages/Series";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
@@ -27,7 +28,23 @@ function App() {
         }
       />
       <Route
+        path="/series"
+        element={
+          <ProtectedRoute>
+            <SeriesPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/watch/:id"
+        element={
+          <ProtectedRoute>
+            <Watch />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/watch/series/:id"
         element={
           <ProtectedRoute>
             <Watch />
