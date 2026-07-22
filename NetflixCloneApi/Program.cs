@@ -14,6 +14,8 @@ builder.Services.AddSingleton<MongoDbService>();
 
 builder.Services.AddScoped<MovieSyncService>();
 
+builder.Services.AddScoped<SeriesSyncService>();
+
 // JWT
 builder.Services.AddScoped<TokenService>();
 var jwtSecret = builder.Configuration["JWT_SECRET"]!;

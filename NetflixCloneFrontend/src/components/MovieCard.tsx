@@ -1,17 +1,15 @@
 import type { Movie } from '../types/Movie'
 import StarRating from './StarRating'
-import { useNavigate } from 'react-router-dom'
 import './MovieCard.css'
 
 interface MovieCardProps {
   movie: Movie
+  onSelect: (movie: Movie) => void
 }
 
-function MovieCard({ movie }: MovieCardProps) {
-  const navigate = useNavigate()
-
+function MovieCard({ movie, onSelect }: MovieCardProps) {
   return (
-    <div className="movie-card" onClick={() => navigate(`/watch/${movie.id}`)}>
+    <div className="movie-card" onClick={() => onSelect(movie)}>
       <img
         src={movie.posterPath ? `https://image.tmdb.org/t/p/w300${movie.posterPath}` : ""}
         alt={movie.title}
