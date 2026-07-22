@@ -3,24 +3,23 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import MovieRow from "../components/MovieRow";
 import MovieModal from "../components/MovieModal";
-import type { Series } from "../types/Series";
 import type { Movie } from "../types/Movie";
 
-function SeriesPage () {
-  const [popular, setPopular] = useState<Series[]>([]);
-  const [topRated, setTopRated] = useState<Series[]>([]);
-  const [selectedSeries, setSelectedSeries] = useState<Series | null>(null);
+function Movies() {
+  const [popular, setPopular] = useState<Movie[]>([]);
+  const [topRated, setTopRated] = useState<Movie[]>([]);
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [profileOpen, setProfileOpen] = useState(false);
   const navigate = useNavigate();
 
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   useEffect(() => {
-    fetch("http://localhost:5145/api/series/popular")
+    fetch("http://localhost:5145/api/movies/popular")
       .then((res) => res.json())
       .then((data) => setPopular(data));
 
-    fetch("http://localhost:5145/api/series/toprated")
+    fetch("http://localhost:5145/api/movies/toprated")
       .then((res) => res.json())
       .then((data) => setTopRated(data));
   }, []);
@@ -33,29 +32,6 @@ function SeriesPage () {
 
   const featured = popular[0];
 
-  // Adapts a Series object into the shape MovieCard/MovieRow/MovieModal expect
-  const toMovieShape = (s: Series): Movie => ({
-    id: s.id,
-    tmdbId: s.tmdbId,
-    title: s.title,
-    overview: s.overview,
-    posterPath: s.posterPath,
-    backdropPath: s.backdropPath,
-    releaseDate: s.firstAirDate,
-    voteAverage: s.voteAverage,
-    genres: s.genres,
-    trailerKey: s.trailerKey,
-    category: s.category,
-  });
-
-  const popularAsMovies = popular.map(toMovieShape);
-  const topRatedAsMovies = topRated.map(toMovieShape);
-
-  const handleSelect = (m: Movie) => {
-    const match = [...popular, ...topRated].find((s) => s.id === m.id);
-    if (match) setSelectedSeries(match);
-  };
-
   return (
     <div className="app">
       <header className="navbar">
@@ -63,17 +39,14 @@ function SeriesPage () {
           <Link to="/" className="logo">NETFLIX</Link>
           <ul className="nav-links">
             <li><Link to="/home">Home</Link></li>
-            <li><Link to="/series" className="nav-link-active">Series</Link></li>
-            <li><Link to="/movies">Movies</Link></li>
+            <li><Link to="/series">Series</Link></li>
+            <li><Link to="/movies" className="nav-link-active">Movies</Link></li>
           </ul>
         </div>
 
         <div className="navbar-right">
           <div className="nav-profile">
-            <button
-              className="icon-btn profile-btn"
-              onClick={() => setProfileOpen(!profileOpen)}
-            >
+            <button className="icon-btn profile-btn" onClick={() => setProfileOpen(!profileOpen)}>
               Account
             </button>
             {profileOpen && (
@@ -101,26 +74,26 @@ function SeriesPage () {
         }
       >
         <div className="hero-info">
-          <h1>{featured ? featured.title : "Series"}</h1>
+          <h1>{featured ? featured.title : "Movies"}</h1>
           <p>
             {featured
               ? (featured.overview.length > 180
                   ? featured.overview.slice(0, 180) + "..."
                   : featured.overview)
-              : "Discover trending and top rated series."}
+              : "Watch the latest and most popular movies, updated daily."}
           </p>
           <div className="hero-buttons">
             <button
               className="hero-play-btn"
               disabled={!featured}
-              onClick={() => { if (featured) navigate("/watch/series/" + featured.id); }}
+              onClick={() => { if (featured) navigate("/watch/" + featured.id); }}
             >
               Play
             </button>
             <button
               className="hero-info-btn"
               disabled={!featured}
-              onClick={() => { if (featured) setSelectedSeries(featured); }}
+              onClick={() => { if (featured) setSelectedMovie(featured); }}
             >
               More Info
             </button>
@@ -129,16 +102,8 @@ function SeriesPage () {
       </div>
 
       <main className="main-content">
-        {popular.length === 0 && topRated.length === 0 ? (
-          <div style={{ padding: "60px 0", textAlign: "center" }}>
-            <p style={{ color: "#b3b3b3" }}>No series available yet.</p>
-          </div>
-        ) : (
-          <>
-            <MovieRow title="Trending Series" movies={popularAsMovies} onSelect={handleSelect} />
-            <MovieRow title="Top Rated Series" movies={topRatedAsMovies} onSelect={handleSelect} />
-          </>
-        )}
+        <MovieRow title="Popular Movies" movies={popular} onSelect={setSelectedMovie} />
+        <MovieRow title="Top Rated Movies" movies={topRated} onSelect={setSelectedMovie} />
       </main>
 
       <footer className="home-footer">
@@ -146,7 +111,6 @@ function SeriesPage () {
           <a href="#">FAQ</a>
           <a href="#">Help Centre</a>
           <a href="#">Account</a>
-          <a href="#">Media Centre</a>
           <a href="#">Terms of Use</a>
           <a href="#">Privacy</a>
         </div>
@@ -155,15 +119,11 @@ function SeriesPage () {
         </div>
       </footer>
 
-      {selectedSeries ? (
-        <MovieModal
-          movie={toMovieShape(selectedSeries)}
-          onClose={() => setSelectedSeries(null)}
-          isSeries={true}
-        />
+      {selectedMovie ? (
+        <MovieModal movie={selectedMovie} onClose={() => setSelectedMovie(null)} />
       ) : null}
     </div>
   );
 }
 
-export default SeriesPage;
+export default Movies;
