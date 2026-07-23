@@ -35,7 +35,7 @@ function MovieModal({ movie, onClose, isSeries = false }: MovieModalProps) {
 
           <div className="modal-badges">
             {year && <span className="modal-badge">{year}</span>}
-            <span className="modal-badge">Movie</span>
+            <span className="modal-badge">{isSeries ? "Series" : "Movie"}</span>
             {movie.voteAverage > 0 && (
               <span className="modal-badge">⭐ {movie.voteAverage.toFixed(1)}</span>
             )}

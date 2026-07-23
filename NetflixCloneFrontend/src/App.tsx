@@ -7,6 +7,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Home from "./pages/Home";
 import Watch from "./pages/Watch";
+import Movies from "./pages/Movies";
 import SeriesPage from "./pages/Series";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -51,6 +52,14 @@ function App() {
           </ProtectedRoute>
         }
       />
+      <Route
+  path="/movies"
+  element={
+    <ProtectedRoute>
+      <Movies />
+    </ProtectedRoute>
+  }
+/>
     </Routes>
   );
 }
