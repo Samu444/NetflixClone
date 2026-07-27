@@ -1,0 +1,100 @@
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  max-width: 400px;
+  width: 100%;
+}
+
+.profile-form-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.avatar-picker {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.avatar-option {
+  width: 50px;
+  height: 50px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.avatar-option.selected {
+  border-color: #e50914;
+}
+
+.avatar-option:hover {
+  border-color: white;
+}
+
+.profile-form-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: #333;
+  border: 1px solid #555;
+  color: white;
+  font-size: 1rem;
+  border-radius: 4px;
+  outline: none;
+}
+
+.profile-form-error {
+  color: #e87c03;
+  font-size: 0.9rem;
+}
+
+.profile-form-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.profile-save-btn {
+  background: white;
+  color: black;
+  border: none;
+  padding: 10px 28px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.profile-cancel-btn {
+  background: transparent;
+  color: #b3b3b3;
+  border: 1px solid #737373;
+  padding: 10px 28px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.profile-delete-btn {
+  background: transparent;
+  color: #e87c03;
+  border: 1px solid #e87c03;
+  padding: 10px 28px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.profile-save-btn:hover {
+  background: #ddd;
+}
+
+.profile-cancel-btn:hover,
+.profile-delete-btn:hover {
+  background: rgba(255,255,255,0.1);
+}

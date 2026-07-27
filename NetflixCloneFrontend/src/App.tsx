@@ -10,6 +10,8 @@ import Watch from "./pages/Watch";
 import Movies from "./pages/Movies";
 import SeriesPage from "./pages/Series";
 import ProtectedRoute from "./components/ProtectedRoute";
+import WhosWatching from "./pages/WhosWatching";
+import ManageProfiles from "./pages/ManageProfiles";
 
 function App() {
   return (
@@ -53,6 +55,22 @@ function App() {
         }
       />
       <Route
+  path="/whos-watching"
+  element={
+    <ProtectedRoute>
+      <WhosWatching />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/manage-profiles"
+  element={
+    <ProtectedRoute>
+      <ManageProfiles />
+    </ProtectedRoute>
+  }
+/>
+      <Route
   path="/movies"
   element={
     <ProtectedRoute>
@@ -60,6 +78,7 @@ function App() {
     </ProtectedRoute>
   }
 />
+
     </Routes>
   );
 }

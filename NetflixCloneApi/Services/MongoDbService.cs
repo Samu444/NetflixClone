@@ -23,6 +23,9 @@ public class MongoDbService
     public IMongoCollection<User> Users =>
         _database.GetCollection<User>("users");
 
+    public IMongoCollection<Profile> Profiles =>
+    _database.GetCollection<Profile>("profiles");
+
     private void SeedUsers()
     {
         var exists = Users.Find(_ => true).Any();
