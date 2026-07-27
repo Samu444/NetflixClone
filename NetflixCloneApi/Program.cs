@@ -7,9 +7,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
+builder.Services.AddScoped<EmailService>();
 
 // MongoDB
 builder.Services.AddSingleton<MongoDbService>();
+
+builder.Services.AddScoped<MovieSyncService>();
+
+builder.Services.AddScoped<SeriesSyncService>();
 
 // JWT
 builder.Services.AddScoped<TokenService>();

@@ -49,8 +49,6 @@ public class SeriesSyncService
             var genreNames = genreIds.Where(GenreMap.ContainsKey).Select(g => GenreMap[g]).ToList();
 
             var trailerKey = await GetTrailerKey(tmdbId, apiKey!, client);
-            var cast = await GetCast(tmdbId, apiKey!, client);
-            var (seasons, rating) = await GetDetails(tmdbId, apiKey!, client);
 
             var series = new Series
             {
@@ -62,9 +60,6 @@ public class SeriesSyncService
                 FirstAirDate = item.TryGetProperty("first_air_date", out var r) ? r.GetString() ?? "" : "",
                 VoteAverage = item.TryGetProperty("vote_average", out var v) ? v.GetDouble() : 0,
                 Genres = genreNames,
-                Cast = cast,
-                NumberOfSeasons = seasons,
-                ContentRating = rating,
                 TrailerKey = trailerKey,
                 Category = category
             };
@@ -95,72 +90,5 @@ public class SeriesSyncService
         }
         catch { }
         return "";
-    }
-
-    private async Task<List<string>> GetCast(int tmdbId, string apiKey, HttpClient client)
-    {
-        var cast = new List<string>();
-        try
-        {
-            var url = $"https://api.themoviedb.org/3/tv/{tmdbId}/credits?api_key={apiKey}&language=en-US";
-            var response = await client.GetAsync(url);
-            if (!response.IsSuccessStatusCode) return cast;
-
-            var json = await response.Content.ReadAsStringAsync();
-            using var doc = JsonDocument.Parse(json);
-            var castArray = doc.RootElement.GetProperty("cast");
-
-            foreach (var actor in castArray.EnumerateArray().Take(6))
-            {
-                var name = actor.GetProperty("name").GetString();
-                if (!string.IsNullOrEmpty(name)) cast.Add(name);
-            }
-        }
-        catch { }
-        return cast;
-    }
-
-    private async Task<(int Seasons, string Rating)> GetDetails(int tmdbId, string apiKey, HttpClient client)
-    {
-        int seasons = 0;
-        string rating = "";
-
-        try
-        {
-            var url = $"https://api.themoviedb.org/3/tv/{tmdbId}?api_key={apiKey}&language=en-US";
-            var response = await client.GetAsync(url);
-            if (response.IsSuccessStatusCode)
-            {
-                var json = await response.Content.ReadAsStringAsync();
-                using var doc = JsonDocument.Parse(json);
-                if (doc.RootElement.TryGetProperty("number_of_seasons", out var s) && s.ValueKind == JsonValueKind.Number)
-                    seasons = s.GetInt32();
-            }
-        }
-        catch { }
-
-        try
-        {
-            var certUrl = $"https://api.themoviedb.org/3/tv/{tmdbId}/content_ratings?api_key={apiKey}";
-            var certResponse = await client.GetAsync(certUrl);
-            if (certResponse.IsSuccessStatusCode)
-            {
-                var certJson = await certResponse.Content.ReadAsStringAsync();
-                using var certDoc = JsonDocument.Parse(certJson);
-                var results = certDoc.RootElement.GetProperty("results");
-
-                foreach (var country in results.EnumerateArray())
-                {
-                    if (country.GetProperty("iso_3166_1").GetString() == "US")
-                    {
-                        rating = country.GetProperty("rating").GetString() ?? "";
-                        break;
-                    }
-                }
-            }
-        }
-        catch { }
-
-        return (seasons, rating);
     }
 }

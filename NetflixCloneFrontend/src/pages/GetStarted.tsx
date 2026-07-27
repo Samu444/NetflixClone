@@ -1,5 +1,4 @@
 import "./GetStarted.css";
-import heroImage from "../assets/hero.png";
 import { useNavigate, Link } from "react-router-dom";
 
 function GetStarted() {
@@ -21,7 +20,7 @@ function GetStarted() {
         <p>Ready to watch? Enter your email to create or restart your membership.</p>
         <div className="email-form">
           <input type="email" placeholder="Email address" />
-          <button onClick={() => navigate("/login")}>Get Started &gt;</button>
+          <button onClick={() => navigate("/register")}>Get Started &gt;</button>
         </div>
       </div>
 

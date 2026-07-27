@@ -8,10 +8,6 @@ export interface Movie {
   releaseDate: string
   voteAverage: number
   genres: string[]
-  cast: string[]
-  runtime?: number
-  numberOfSeasons?: number
-  contentRating?: string
   trailerKey: string
   category: string
 }

@@ -1,25 +1,18 @@
 import "../App.css";
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import MovieRow from "../components/MovieRow";
 import MovieModal from "../components/MovieModal";
 import type { Movie } from "../types/Movie";
-import type { Series } from "../types/Series";
 
-function Home() {
-  const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
-  const [topRatedMovies, setTopRatedMovies] = useState<Movie[]>([]);
-  const [popularSeries, setPopularSeries] = useState<Series[]>([]);
-  const [topRatedSeries, setTopRatedSeries] = useState<Series[]>([]);
-
+function Movies() {
+  const [popular, setPopular] = useState<Movie[]>([]);
+  const [topRated, setTopRated] = useState<Movie[]>([]);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
-  const [selectedIsSeries, setSelectedIsSeries] = useState(false);
-
+  const [profileOpen, setProfileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [profileOpen, setProfileOpen] = useState(false);
   const navigate = useNavigate();
-  const seriesRowRef = useRef<HTMLDivElement>(null);
 
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const activeProfile = JSON.parse(localStorage.getItem("activeProfile") || "null");
@@ -27,19 +20,11 @@ function Home() {
   useEffect(() => {
     fetch("http://localhost:5145/api/movies/popular")
       .then((res) => res.json())
-      .then((data) => setPopularMovies(data));
+      .then((data) => setPopular(data));
 
     fetch("http://localhost:5145/api/movies/toprated")
       .then((res) => res.json())
-      .then((data) => setTopRatedMovies(data));
-
-    fetch("http://localhost:5145/api/series/popular")
-      .then((res) => res.json())
-      .then((data) => setPopularSeries(data));
-
-    fetch("http://localhost:5145/api/series/toprated")
-      .then((res) => res.json())
-      .then((data) => setTopRatedSeries(data));
+      .then((data) => setTopRated(data));
   }, []);
 
   const handleLogout = () => {
@@ -48,44 +33,17 @@ function Home() {
     navigate("/");
   };
 
-  const featured = popularMovies[0];
-
-  const toMovieShape = (s: Series): Movie => ({
-    id: s.id,
-    tmdbId: s.tmdbId,
-    title: s.title,
-    overview: s.overview,
-    posterPath: s.posterPath,
-    backdropPath: s.backdropPath,
-    releaseDate: s.firstAirDate,
-    voteAverage: s.voteAverage,
-    genres: s.genres,
-    trailerKey: s.trailerKey,
-    category: s.category,
-  });
-
-  const popularSeriesAsMovies = popularSeries.map(toMovieShape);
-  const topRatedSeriesAsMovies = topRatedSeries.map(toMovieShape);
+  const featured = popular[0];
 
   const searchResults = searchTerm.trim()
     ? Array.from(
         new Map(
-          [...popularMovies, ...topRatedMovies, ...popularSeriesAsMovies, ...topRatedSeriesAsMovies]
+          [...popular, ...topRated]
             .filter((m) => m.title.toLowerCase().includes(searchTerm.toLowerCase()))
             .map((m) => [m.tmdbId, m])
         ).values()
       )
     : [];
-
-  const openMovieModal = (m: Movie) => {
-    setSelectedMovie(m);
-    setSelectedIsSeries(false);
-  };
-
-  const openSeriesModal = (m: Movie) => {
-    setSelectedMovie(m);
-    setSelectedIsSeries(true);
-  };
 
   return (
     <div className="app">
@@ -93,9 +51,9 @@ function Home() {
         <div className="navbar-left">
           <Link to="/" className="logo">NETFLIX</Link>
           <ul className="nav-links">
-            <li><Link to="/home" className="nav-link-active">Home</Link></li>
+            <li><Link to="/home">Home</Link></li>
             <li><Link to="/series">Series</Link></li>
-            <li><Link to="/movies">Movies</Link></li>
+            <li><Link to="/movies" className="nav-link-active">Movies</Link></li>
           </ul>
         </div>
 
@@ -128,7 +86,7 @@ function Home() {
                       key={m.id}
                       className="search-result-item"
                       onClick={() => {
-                        openMovieModal(m);
+                        setSelectedMovie(m);
                         setSearchTerm("");
                         setSearchOpen(false);
                       }}
@@ -209,13 +167,13 @@ function Home() {
         }
       >
         <div className="hero-info">
-          <h1>{featured ? featured.title : "Trending Now"}</h1>
+          <h1>{featured ? featured.title : "Movies"}</h1>
           <p>
             {featured
               ? (featured.overview.length > 180
                   ? featured.overview.slice(0, 180) + "..."
                   : featured.overview)
-              : "Watch the latest and most popular movies and series, updated daily."}
+              : "Watch the latest and most popular movies, updated daily."}
           </p>
           <div className="hero-buttons">
             <button
@@ -228,7 +186,7 @@ function Home() {
             <button
               className="hero-info-btn"
               disabled={!featured}
-              onClick={() => { if (featured) openMovieModal(featured); }}
+              onClick={() => { if (featured) setSelectedMovie(featured); }}
             >
               More Info
             </button>
@@ -237,12 +195,8 @@ function Home() {
       </div>
 
       <main className="main-content">
-        <MovieRow title="Trending Movies" movies={popularMovies} onSelect={openMovieModal} />
-        <div ref={seriesRowRef}>
-          <MovieRow title="Trending Series" movies={popularSeriesAsMovies} onSelect={openSeriesModal} />
-        </div>
-        <MovieRow title="Top Rated Movies" movies={topRatedMovies} onSelect={openMovieModal} />
-        <MovieRow title="Top Rated Series" movies={topRatedSeriesAsMovies} onSelect={openSeriesModal} />
+        <MovieRow title="Popular Movies" movies={popular} onSelect={setSelectedMovie} />
+        <MovieRow title="Top Rated Movies" movies={topRated} onSelect={setSelectedMovie} />
       </main>
 
       <footer className="home-footer">
@@ -250,7 +204,6 @@ function Home() {
           <a href="#">FAQ</a>
           <a href="#">Help Centre</a>
           <a href="#">Account</a>
-          <a href="#">Media Centre</a>
           <a href="#">Terms of Use</a>
           <a href="#">Privacy</a>
         </div>
@@ -260,14 +213,10 @@ function Home() {
       </footer>
 
       {selectedMovie ? (
-        <MovieModal
-          movie={selectedMovie}
-          onClose={() => setSelectedMovie(null)}
-          isSeries={selectedIsSeries}
-        />
+        <MovieModal movie={selectedMovie} onClose={() => setSelectedMovie(null)} />
       ) : null}
     </div>
   );
 }
 
-export default Home;
+export default Movies;

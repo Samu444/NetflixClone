@@ -44,6 +44,7 @@ public class SeriesController : ControllerBase
     {
         if (!MongoDB.Bson.ObjectId.TryParse(id, out _))
             return BadRequest("Invalid series ID format.");
+
         var series = await _mongo.Series.Find(s => s.Id == id).FirstOrDefaultAsync();
         if (series == null) return NotFound();
         return Ok(series);

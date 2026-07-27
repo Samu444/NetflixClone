@@ -14,8 +14,17 @@ public class MongoDbService
         SeedUsers();
     }
 
+    public IMongoCollection<Movie> Movies =>
+    _database.GetCollection<Movie>("movies");
+
+    public IMongoCollection<Series> Series =>
+    _database.GetCollection<Series>("series");
+
     public IMongoCollection<User> Users =>
         _database.GetCollection<User>("users");
+
+    public IMongoCollection<Profile> Profiles =>
+    _database.GetCollection<Profile>("profiles");
 
     private void SeedUsers()
     {

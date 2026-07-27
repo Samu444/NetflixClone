@@ -5,9 +5,10 @@ import './MovieRow.css'
 interface MovieRowProps {
   title: string
   movies: Movie[]
+  onSelect: (movie: Movie) => void
 }
 
-function MovieRow({ title, movies }: MovieRowProps) {
+function MovieRow({ title, movies, onSelect }: MovieRowProps) {
   return (
     <div className="movie-row">
       <h2 className="row-title">{title}</h2>
@@ -16,6 +17,7 @@ function MovieRow({ title, movies }: MovieRowProps) {
           <MovieCard
             key={movie.id}
             movie={movie}
+            onSelect={onSelect}
           />
         ))}
       </div>
