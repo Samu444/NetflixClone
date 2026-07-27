@@ -1,17 +1,16 @@
-export interface Movie {
+export interface Series {
   id: string
   tmdbId: number
   title: string
   overview: string
   posterPath: string
   backdropPath: string
-  releaseDate: string
+  firstAirDate: string
   voteAverage: number
   genres: string[]
   cast: string[]
-  runtime?: number
-  numberOfSeasons?: number
-  contentRating?: string
+  numberOfSeasons: number
+  contentRating: string
   trailerKey: string
   category: string
 }
