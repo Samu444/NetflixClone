@@ -49,7 +49,8 @@ public class MovieSyncService
             var genreNames = genreIds.Where(GenreMap.ContainsKey).Select(g => GenreMap[g]).ToList();
 
             var trailerKey = await GetTrailerKey(tmdbId, apiKey!, client);
-            
+            var cast = await GetCast(tmdbId, apiKey!, client);
+            var (runtime, rating) = await GetDetails(tmdbId, apiKey!, client);
 
             var movie = new Movie
             {
@@ -61,6 +62,9 @@ public class MovieSyncService
                 ReleaseDate = item.TryGetProperty("release_date", out var r) ? r.GetString() ?? "" : "",
                 VoteAverage = item.TryGetProperty("vote_average", out var v) ? v.GetDouble() : 0,
                 Genres = genreNames,
+                Cast = cast,
+                Runtime = runtime,
+                ContentRating = rating,
                 TrailerKey = trailerKey,
                 Category = category
             };
@@ -93,4 +97,78 @@ public class MovieSyncService
         return "";
     }
 
+    private async Task<List<string>> GetCast(int tmdbId, string apiKey, HttpClient client)
+    {
+        var cast = new List<string>();
+        try
+        {
+            var url = $"https://api.themoviedb.org/3/movie/{tmdbId}/credits?api_key={apiKey}&language=en-US";
+            var response = await client.GetAsync(url);
+            if (!response.IsSuccessStatusCode) return cast;
+
+            var json = await response.Content.ReadAsStringAsync();
+            using var doc = JsonDocument.Parse(json);
+            var castArray = doc.RootElement.GetProperty("cast");
+
+            foreach (var actor in castArray.EnumerateArray().Take(6))
+            {
+                var name = actor.GetProperty("name").GetString();
+                if (!string.IsNullOrEmpty(name)) cast.Add(name);
+            }
+        }
+        catch { }
+        return cast;
+    }
+
+    private async Task<(int Runtime, string Rating)> GetDetails(int tmdbId, string apiKey, HttpClient client)
+    {
+        int runtime = 0;
+        string rating = "";
+
+        try
+        {
+            var url = $"https://api.themoviedb.org/3/movie/{tmdbId}?api_key={apiKey}&language=en-US";
+            var response = await client.GetAsync(url);
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                using var doc = JsonDocument.Parse(json);
+                if (doc.RootElement.TryGetProperty("runtime", out var r) && r.ValueKind == JsonValueKind.Number)
+                    runtime = r.GetInt32();
+            }
+        }
+        catch { }
+
+        try
+        {
+            var certUrl = $"https://api.themoviedb.org/3/movie/{tmdbId}/release_dates?api_key={apiKey}";
+            var certResponse = await client.GetAsync(certUrl);
+            if (certResponse.IsSuccessStatusCode)
+            {
+                var certJson = await certResponse.Content.ReadAsStringAsync();
+                using var certDoc = JsonDocument.Parse(certJson);
+                var results = certDoc.RootElement.GetProperty("results");
+
+                foreach (var country in results.EnumerateArray())
+                {
+                    if (country.GetProperty("iso_3166_1").GetString() == "US")
+                    {
+                        foreach (var rd in country.GetProperty("release_dates").EnumerateArray())
+                        {
+                            var certification = rd.GetProperty("certification").GetString();
+                            if (!string.IsNullOrEmpty(certification))
+                            {
+                                rating = certification;
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        catch { }
+
+        return (runtime, rating);
+    }
 }

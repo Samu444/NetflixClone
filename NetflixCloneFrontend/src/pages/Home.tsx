@@ -60,6 +60,9 @@ function Home() {
     releaseDate: s.firstAirDate,
     voteAverage: s.voteAverage,
     genres: s.genres,
+    cast: s.cast,
+    numberOfSeasons: s.numberOfSeasons,
+    contentRating: s.contentRating,
     trailerKey: s.trailerKey,
     category: s.category,
   });

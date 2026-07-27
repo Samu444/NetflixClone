@@ -18,6 +18,9 @@ public class Series
     public string FirstAirDate { get; set; } = string.Empty;
     public double VoteAverage { get; set; }
     public List<string> Genres { get; set; } = new();
+    public List<string> Cast { get; set; } = new();
+    public int NumberOfSeasons { get; set; }
+    public string ContentRating { get; set; } = string.Empty;
     public string TrailerKey { get; set; } = string.Empty;
     public string Category { get; set; } = string.Empty; // "popular" or "top_rated"
 }

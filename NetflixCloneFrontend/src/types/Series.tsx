@@ -8,6 +8,9 @@ export interface Series {
   firstAirDate: string
   voteAverage: number
   genres: string[]
+  cast: string[]
+  numberOfSeasons: number
+  contentRating: string
   trailerKey: string
   category: string
 }
