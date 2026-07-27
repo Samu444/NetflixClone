@@ -26,7 +26,7 @@ function Login() {
       const data = await response.json();
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify({ name: data.name, email: data.email }));
-      navigate("/home");
+      navigate("/whos-watching");
     } catch (err) {
       setError("Something went wrong. Please try again.");
       console.error(err);
