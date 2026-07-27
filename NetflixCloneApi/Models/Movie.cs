@@ -19,4 +19,4 @@ public class Movie
     public List<string> Genres { get; set; } = new();
     public string TrailerKey { get; set; } = string.Empty;
     public string Category { get; set; } = string.Empty; // "popular" or "top_rated"
-}
+}    

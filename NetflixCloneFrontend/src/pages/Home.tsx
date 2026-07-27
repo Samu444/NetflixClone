@@ -22,7 +22,7 @@ function Home() {
   const seriesRowRef = useRef<HTMLDivElement>(null);
 
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-const activeProfile = JSON.parse(localStorage.getItem("activeProfile") || "null");
+  const activeProfile = JSON.parse(localStorage.getItem("activeProfile") || "null");
 
   useEffect(() => {
     fetch("http://localhost:5145/api/movies/popular")
@@ -68,14 +68,14 @@ const activeProfile = JSON.parse(localStorage.getItem("activeProfile") || "null"
   const topRatedSeriesAsMovies = topRatedSeries.map(toMovieShape);
 
   const searchResults = searchTerm.trim()
-  ? Array.from(
-      new Map(
-        [...popularMovies, ...topRatedMovies, ...popularSeriesAsMovies, ...topRatedSeriesAsMovies]
-          .filter((m) => m.title.toLowerCase().includes(searchTerm.toLowerCase()))
-          .map((m) => [m.tmdbId, m]) // dedupe by tmdbId, keeps last occurrence
-      ).values()
-    )
-  : [];
+    ? Array.from(
+        new Map(
+          [...popularMovies, ...topRatedMovies, ...popularSeriesAsMovies, ...topRatedSeriesAsMovies]
+            .filter((m) => m.title.toLowerCase().includes(searchTerm.toLowerCase()))
+            .map((m) => [m.tmdbId, m])
+        ).values()
+      )
+    : [];
 
   const openMovieModal = (m: Movie) => {
     setSelectedMovie(m);
@@ -101,21 +101,23 @@ const activeProfile = JSON.parse(localStorage.getItem("activeProfile") || "null"
 
         <div className="navbar-right">
           <div className="nav-search">
-            {searchOpen && (
-              <input
-                type="text"
-                autoFocus
-                placeholder="Titles..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                onBlur={() => {
-                  if (!searchTerm) setSearchOpen(false);
-                }}
-                className="nav-search-input"
-              />
-            )}
-            <button className="icon-btn" onClick={() => setSearchOpen(!searchOpen)} aria-label="Search">
-              Search
+            <input
+              type="text"
+              placeholder="Titles..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onBlur={() => { if (!searchTerm) setSearchOpen(false); }}
+              className={`nav-search-input${searchOpen ? " open" : ""}`}
+            />
+            <button
+              className="nav-search-icon-btn"
+              onClick={() => setSearchOpen(!searchOpen)}
+              aria-label="Search"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
             </button>
 
             {searchTerm.trim() && (
@@ -145,53 +147,53 @@ const activeProfile = JSON.parse(localStorage.getItem("activeProfile") || "null"
           </div>
 
           <div className="nav-profile">
- <button
-  className="icon-btn profile-btn"
-  onClick={() => setProfileOpen(!profileOpen)}
->
-  <span className="nav-profile-icon-wrapper">
-    {activeProfile ? (
-      <img
-        src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(activeProfile.avatarSeed)}`}
-        alt={activeProfile.name}
-      />
-    ) : (
-      <svg className="nav-profile-icon" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/>
-      </svg>
-    )}
-  </span>
-  <span className="nav-profile-name">{activeProfile ? activeProfile.name : user.name}</span>
-</button>
-{profileOpen && (
-  <div className="profile-dropdown">
-    <div className="profile-dropdown-header">
-      <span className="profile-dropdown-icon-wrapper">
-        {activeProfile ? (
-          <img
-            src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(activeProfile.avatarSeed)}`}
-            alt={activeProfile.name}
-          />
-        ) : (
-          <svg className="nav-profile-icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/>
-          </svg>
-        )}
-      </span>
-      <span className="profile-dropdown-name">{activeProfile ? activeProfile.name : user.name}</span>
-    </div>
-    <hr />
-    <button
-      className="profile-dropdown-switch"
-      onClick={() => navigate("/whos-watching")}
-    >
-      Switch Profiles
-    </button>
-    <button className="profile-dropdown-signout" onClick={handleLogout}>
-      Sign Out of Netflix
-    </button>
-  </div>
-)}
+            <button
+              className="icon-btn profile-btn"
+              onClick={() => setProfileOpen(!profileOpen)}
+            >
+              <span className="nav-profile-icon-wrapper">
+                {activeProfile ? (
+                  <img
+                    src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(activeProfile.avatarSeed)}`}
+                    alt={activeProfile.name}
+                  />
+                ) : (
+                  <svg className="nav-profile-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/>
+                  </svg>
+                )}
+              </span>
+              <span className="nav-profile-name">{activeProfile ? activeProfile.name : user.name}</span>
+            </button>
+            {profileOpen && (
+              <div className="profile-dropdown">
+                <div className="profile-dropdown-header">
+                  <span className="profile-dropdown-icon-wrapper">
+                    {activeProfile ? (
+                      <img
+                        src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(activeProfile.avatarSeed)}`}
+                        alt={activeProfile.name}
+                      />
+                    ) : (
+                      <svg className="nav-profile-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/>
+                      </svg>
+                    )}
+                  </span>
+                  <span className="profile-dropdown-name">{activeProfile ? activeProfile.name : user.name}</span>
+                </div>
+                <hr />
+                <button
+                  className="profile-dropdown-switch"
+                  onClick={() => navigate("/whos-watching")}
+                >
+                  Switch Profiles
+                </button>
+                <button className="profile-dropdown-signout" onClick={handleLogout}>
+                  Sign Out of Netflix
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </header>
