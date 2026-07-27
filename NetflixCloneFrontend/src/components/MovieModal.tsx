@@ -9,9 +9,7 @@ interface MovieModalProps {
 }
 
 function MovieModal({ movie, onClose, isSeries = false }: MovieModalProps) {
-
   const navigate = useNavigate();
-
   const year = movie.releaseDate ? movie.releaseDate.slice(0, 4) : "";
 
   return (

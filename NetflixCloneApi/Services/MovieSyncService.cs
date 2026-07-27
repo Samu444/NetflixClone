@@ -10,7 +10,6 @@ public class MovieSyncService
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IConfiguration _config;
 
-    // TMDB genre id -> name map (common ones)
     private static readonly Dictionary<int, string> GenreMap = new()
     {
         {28,"Action"},{12,"Adventure"},{16,"Animation"},{35,"Comedy"},{80,"Crime"},
@@ -49,8 +48,8 @@ public class MovieSyncService
             var genreIds = item.GetProperty("genre_ids").EnumerateArray().Select(g => g.GetInt32()).ToList();
             var genreNames = genreIds.Where(GenreMap.ContainsKey).Select(g => GenreMap[g]).ToList();
 
-            // Fetch trailer key
             var trailerKey = await GetTrailerKey(tmdbId, apiKey!, client);
+            
 
             var movie = new Movie
             {
@@ -93,4 +92,5 @@ public class MovieSyncService
         catch { }
         return "";
     }
+
 }

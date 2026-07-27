@@ -104,6 +104,7 @@
   align-items: center;
   gap: 8px;
   transition: background 0.2s ease;
+  margin-bottom: 32px;
 }
 
 .modal-play-btn:hover {
