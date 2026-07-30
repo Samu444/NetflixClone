@@ -11,6 +11,7 @@ function ManageProfiles() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [name, setName] = useState("");
   const [avatarSeed, setAvatarSeed] = useState(AVATAR_SEEDS[0]);
+  const [isKids, setIsKids] = useState(false);
   const [isNew, setIsNew] = useState(false);
   const [error, setError] = useState("");
 
@@ -34,10 +35,12 @@ function ManageProfiles() {
       setEditingId(state.editProfile.id);
       setName(state.editProfile.name);
       setAvatarSeed(state.editProfile.avatarSeed);
+      setIsKids(state.editProfile.isKids);
     } else if (state?.addNew) {
       setIsNew(true);
       setName("");
       setAvatarSeed(AVATAR_SEEDS[Math.floor(Math.random() * AVATAR_SEEDS.length)]);
+      setIsKids(false);
     }
   }, []);
 
@@ -57,7 +60,7 @@ function ManageProfiles() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ name, avatarSeed, isKids: false }),
+        body: JSON.stringify({ name, avatarSeed, isKids }),
       });
 
       if (!response.ok) {
@@ -72,7 +75,7 @@ function ManageProfiles() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ name, avatarSeed }),
+        body: JSON.stringify({ name, avatarSeed, isKids }),
       });
 
       if (!response.ok) {
@@ -108,6 +111,7 @@ function ManageProfiles() {
     setEditingId(null);
     setIsNew(false);
     setName("");
+    setIsKids(false);
     setError("");
   };
 
@@ -130,6 +134,7 @@ function ManageProfiles() {
                   setEditingId(profile.id);
                   setName(profile.name);
                   setAvatarSeed(profile.avatarSeed);
+                  setIsKids(profile.isKids);
                 }}
               >
                 <div className="profile-avatar-wrapper">
@@ -184,6 +189,15 @@ function ManageProfiles() {
             className="profile-form-input"
             maxLength={20}
           />
+
+          <label className="profile-kids-toggle">
+            <input
+              type="checkbox"
+              checked={isKids}
+              onChange={(e) => setIsKids(e.target.checked)}
+            />
+            Kids Profile
+          </label>
 
           <div className="profile-form-actions">
             <button className="profile-save-btn" onClick={handleSave}>

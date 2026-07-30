@@ -78,7 +78,8 @@ public class ProfilesController : ControllerBase
 
         var update = Builders<Profile>.Update
             .Set(p => p.Name, dto.Name)
-            .Set(p => p.AvatarSeed, dto.AvatarSeed);
+            .Set(p => p.AvatarSeed, dto.AvatarSeed)
+            .Set(p => p.IsKids, dto.IsKids);
 
         await _mongo.Profiles.UpdateOneAsync(p => p.Id == id, update);
         return Ok(new { message = "Profile updated." });

@@ -49,4 +49,11 @@ public class SeriesController : ControllerBase
         if (series == null) return NotFound();
         return Ok(series);
     }
+
+    [HttpGet("kids")]
+    public async Task<IActionResult> GetKidsSeries()
+    {
+        var series = await _mongo.Series.Find(s => s.IsKidsContent).ToListAsync();
+        return Ok(series);
+    }
 }
