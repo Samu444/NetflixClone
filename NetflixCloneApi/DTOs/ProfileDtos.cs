@@ -11,4 +11,5 @@ public class UpdateProfileDto
 {
     public string Name { get; set; } = string.Empty;
     public string AvatarSeed { get; set; } = string.Empty;
+    public bool IsKids { get; set; } = false;
 }

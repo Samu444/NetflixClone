@@ -22,5 +22,6 @@ public class Series
     public int NumberOfSeasons { get; set; }
     public string ContentRating { get; set; } = string.Empty;
     public string TrailerKey { get; set; } = string.Empty;
+    public bool IsKidsContent { get; set; }
     public string Category { get; set; } = string.Empty; // "popular" or "top_rated"
 }

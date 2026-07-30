@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Profile } from "../types/Profile";
+import { setActiveProfile } from "../utils/activeProfile";
 import "./WhosWatching.css";
 
 function WhosWatching() {
@@ -25,7 +26,7 @@ function WhosWatching() {
       navigate("/manage-profiles", { state: { editProfile: profile } });
       return;
     }
-    localStorage.setItem("activeProfile", JSON.stringify(profile));
+    setActiveProfile(profile);
     navigate("/home");
   };
 

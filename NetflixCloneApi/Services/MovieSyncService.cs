@@ -10,6 +10,9 @@ public class MovieSyncService
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IConfiguration _config;
 
+    private static readonly HashSet<string> KidsRatings = new() { "G", "PG" };
+    private static readonly HashSet<string> KidsGenres = new() { "Animation", "Family" };
+
     private static readonly Dictionary<int, string> GenreMap = new()
     {
         {28,"Action"},{12,"Adventure"},{16,"Animation"},{35,"Comedy"},{80,"Crime"},
@@ -65,6 +68,7 @@ public class MovieSyncService
                 Cast = cast,
                 Runtime = runtime,
                 ContentRating = rating,
+                IsKidsContent = DetermineIsKidsContent(genreNames, rating), // ← add this line
                 TrailerKey = trailerKey,
                 Category = category
             };
@@ -118,6 +122,14 @@ public class MovieSyncService
         }
         catch { }
         return cast;
+    }
+
+    private bool DetermineIsKidsContent(List<string> genres, string rating)
+    {
+        bool ratingOk = KidsRatings.Contains(rating);
+        bool genreOk = genres.Any(g => KidsGenres.Contains(g));
+        // Require genre match; rating alone is unreliable (often blank from TMDB)
+        return genreOk || (ratingOk && genres.Count > 0);
     }
 
     private async Task<(int Runtime, string Rating)> GetDetails(int tmdbId, string apiKey, HttpClient client)

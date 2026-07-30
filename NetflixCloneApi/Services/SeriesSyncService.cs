@@ -10,6 +10,9 @@ public class SeriesSyncService
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IConfiguration _config;
 
+    private static readonly HashSet<string> KidsRatings = new() { "TV-Y", "TV-Y7", "TV-G", "TV-PG" };
+    private static readonly HashSet<string> KidsGenres = new() { "Animation", "Family", "Kids" };
+
     private static readonly Dictionary<int, string> GenreMap = new()
     {
         {10759,"Action & Adventure"},{16,"Animation"},{35,"Comedy"},{80,"Crime"},
@@ -66,11 +69,22 @@ public class SeriesSyncService
                 NumberOfSeasons = seasons,
                 ContentRating = rating,
                 TrailerKey = trailerKey,
+                IsKidsContent = DetermineIsKidsContent(genreNames, rating), 
                 Category = category
             };
 
+
+            
+
             await _mongo.Series.InsertOneAsync(series);
         }
+    }
+
+    private bool DetermineIsKidsContent(List<string> genres, string rating)
+    {
+        bool ratingOk = KidsRatings.Contains(rating);
+        bool genreOk = genres.Any(g => KidsGenres.Contains(g));
+        return genreOk || (ratingOk && genres.Count > 0);
     }
 
     private async Task<string> GetTrailerKey(int tmdbId, string apiKey, HttpClient client)

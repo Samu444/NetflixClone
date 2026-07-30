@@ -46,4 +46,11 @@ public class MoviesController : ControllerBase
         if (movie == null) return NotFound();
         return Ok(movie);
     }
+
+    [HttpGet("kids")]
+    public async Task<IActionResult> GetKidsMovies()
+    {
+        var movies = await _mongo.Movies.Find(m => m.IsKidsContent).ToListAsync();
+        return Ok(movies);
+    }
 }

@@ -23,24 +23,41 @@ function Home() {
 
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const activeProfile = JSON.parse(localStorage.getItem("activeProfile") || "null");
+  const isKidsProfile = Boolean(activeProfile?.isKids);
 
   useEffect(() => {
-    fetch("http://localhost:5145/api/movies/popular")
-      .then((res) => res.json())
-      .then((data) => setPopularMovies(data));
+    if (isKidsProfile) {
+      fetch("http://localhost:5145/api/movies/kids")
+        .then((res) => res.json())
+        .then((data) => {
+          setPopularMovies(data);
+          setTopRatedMovies(data);
+        });
 
-    fetch("http://localhost:5145/api/movies/toprated")
-      .then((res) => res.json())
-      .then((data) => setTopRatedMovies(data));
+      fetch("http://localhost:5145/api/series/kids")
+        .then((res) => res.json())
+        .then((data) => {
+          setPopularSeries(data);
+          setTopRatedSeries(data);
+        });
+    } else {
+      fetch("http://localhost:5145/api/movies/popular")
+        .then((res) => res.json())
+        .then((data) => setPopularMovies(data));
 
-    fetch("http://localhost:5145/api/series/popular")
-      .then((res) => res.json())
-      .then((data) => setPopularSeries(data));
+      fetch("http://localhost:5145/api/movies/toprated")
+        .then((res) => res.json())
+        .then((data) => setTopRatedMovies(data));
 
-    fetch("http://localhost:5145/api/series/toprated")
-      .then((res) => res.json())
-      .then((data) => setTopRatedSeries(data));
-  }, []);
+      fetch("http://localhost:5145/api/series/popular")
+        .then((res) => res.json())
+        .then((data) => setPopularSeries(data));
+
+      fetch("http://localhost:5145/api/series/toprated")
+        .then((res) => res.json())
+        .then((data) => setTopRatedSeries(data));
+    }
+  }, [activeProfile?.id, isKidsProfile]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -89,6 +106,11 @@ function Home() {
     setSelectedMovie(m);
     setSelectedIsSeries(true);
   };
+
+  const movieRowTitle = isKidsProfile ? "Movies for Kids" : "Trending Movies";
+  const seriesRowTitle = isKidsProfile ? "Series for Kids" : "Trending Series";
+  const topMovieRowTitle = isKidsProfile ? "More Kids Movies" : "Top Rated Movies";
+  const topSeriesRowTitle = isKidsProfile ? "More Kids Series" : "Top Rated Series";
 
   return (
     <div className="app">
@@ -240,12 +262,12 @@ function Home() {
       </div>
 
       <main className="main-content">
-        <MovieRow title="Trending Movies" movies={popularMovies} onSelect={openMovieModal} />
+        <MovieRow title={movieRowTitle} movies={popularMovies} onSelect={openMovieModal} />
         <div ref={seriesRowRef}>
-          <MovieRow title="Trending Series" movies={popularSeriesAsMovies} onSelect={openSeriesModal} />
+          <MovieRow title={seriesRowTitle} movies={popularSeriesAsMovies} onSelect={openSeriesModal} />
         </div>
-        <MovieRow title="Top Rated Movies" movies={topRatedMovies} onSelect={openMovieModal} />
-        <MovieRow title="Top Rated Series" movies={topRatedSeriesAsMovies} onSelect={openSeriesModal} />
+        <MovieRow title={topMovieRowTitle} movies={topRatedMovies} onSelect={openMovieModal} />
+        <MovieRow title={topSeriesRowTitle} movies={topRatedSeriesAsMovies} onSelect={openSeriesModal} />
       </main>
 
       <footer className="home-footer">

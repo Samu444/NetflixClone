@@ -12,6 +12,7 @@ import SeriesPage from "./pages/Series";
 import ProtectedRoute from "./components/ProtectedRoute";
 import WhosWatching from "./pages/WhosWatching";
 import ManageProfiles from "./pages/ManageProfiles";
+import RequireProfile from "./components/RequireProfile";
 
 function App() {
   return (
@@ -26,7 +27,9 @@ function App() {
         path="/home"
         element={
           <ProtectedRoute>
-            <Home />
+            <RequireProfile>
+              <Home />
+            </RequireProfile>
           </ProtectedRoute>
         }
       />
@@ -34,7 +37,9 @@ function App() {
         path="/series"
         element={
           <ProtectedRoute>
-            <SeriesPage />
+            <RequireProfile>
+              <SeriesPage />
+            </RequireProfile>
           </ProtectedRoute>
         }
       />
@@ -42,7 +47,9 @@ function App() {
         path="/watch/:id"
         element={
           <ProtectedRoute>
-            <Watch />
+            <RequireProfile>
+              <Watch />
+            </RequireProfile>
           </ProtectedRoute>
         }
       />
@@ -50,7 +57,9 @@ function App() {
         path="/watch/series/:id"
         element={
           <ProtectedRoute>
-            <Watch />
+            <RequireProfile>
+              <Watch />
+            </RequireProfile>
           </ProtectedRoute>
         }
       />
@@ -74,7 +83,9 @@ function App() {
   path="/movies"
   element={
     <ProtectedRoute>
-      <Movies />
+      <RequireProfile>
+        <Movies />
+      </RequireProfile>
     </ProtectedRoute>
   }
 />
