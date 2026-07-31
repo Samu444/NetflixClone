@@ -247,13 +247,17 @@ function SeriesPage() {
         </div>
       </footer>
 
-      {selectedSeries ? (
-        <MovieModal
-          movie={toMovieShape(selectedSeries)}
-          onClose={() => setSelectedSeries(null)}
-          isSeries={true}
-        />
-      ) : null}
+    {selectedSeries ? (
+  <MovieModal
+    movie={toMovieShape(selectedSeries)}
+    onClose={() => setSelectedSeries(null)}
+    isSeries={true}
+    onSelectSimilar={(m) => {
+      const match = [...popular, ...topRated].find((s) => s.id === m.id);
+      if (match) setSelectedSeries(match);
+    }}
+  />
+) : null}
     </div>
   );
 }

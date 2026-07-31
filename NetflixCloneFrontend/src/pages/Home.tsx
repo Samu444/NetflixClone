@@ -289,6 +289,10 @@ function Home() {
           movie={selectedMovie}
           onClose={() => setSelectedMovie(null)}
           isSeries={selectedIsSeries}
+          onSelectSimilar={(m, isSeriesType) => {
+           setSelectedMovie(m);
+           setSelectedIsSeries(isSeriesType);
+          }}
         />
       ) : null}
     </div>
