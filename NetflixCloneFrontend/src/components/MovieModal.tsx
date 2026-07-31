@@ -7,6 +7,7 @@ interface MovieModalProps {
   movie: Movie;
   onClose: () => void;
   isSeries?: boolean;
+  onSelectSimilar?: (movie: Movie, isSeries: boolean) => void;
 }
 
 function formatRuntime(minutes?: number): string {
@@ -16,7 +17,7 @@ function formatRuntime(minutes?: number): string {
   return h > 0 ? `${h}h ${m}m` : `${m}m`;
 }
 
-function MovieModal({ movie, onClose, isSeries = false }: MovieModalProps) {
+function MovieModal({ movie, onClose, isSeries = false, onSelectSimilar }: MovieModalProps) {
   const navigate = useNavigate();
   const [similar, setSimilar] = useState<Movie[]>([]);
 
@@ -37,6 +38,14 @@ function MovieModal({ movie, onClose, isSeries = false }: MovieModalProps) {
       })
       .catch(() => setSimilar([]));
   }, [movie.id, movie.category, isSeries]);
+
+  const handleSimilarClick = (m: Movie) => {
+    if (onSelectSimilar) {
+      onSelectSimilar(m, isSeries);
+    } else {
+      navigate(isSeries ? `/watch/series/${m.id}` : `/watch/${m.id}`);
+    }
+  };
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -128,7 +137,12 @@ function MovieModal({ movie, onClose, isSeries = false }: MovieModalProps) {
             <h2 className="modal-similar-title">More Like This</h2>
             <div className="modal-similar-grid">
               {similar.map((m) => (
-                <div className="modal-similar-card" key={m.id}>
+                <div
+                  className="modal-similar-card"
+                  key={m.id}
+                  onClick={() => handleSimilarClick(m)}
+                  style={{ cursor: "pointer" }}
+                >
                   <div
                     className="modal-similar-thumb"
                     style={

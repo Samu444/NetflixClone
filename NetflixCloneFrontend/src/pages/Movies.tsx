@@ -213,7 +213,13 @@ function Movies() {
       </footer>
 
       {selectedMovie ? (
-        <MovieModal movie={selectedMovie} onClose={() => setSelectedMovie(null)} />
+        <MovieModal 
+        movie={selectedMovie} 
+        onClose={() => setSelectedMovie(null)} 
+        onSelectSimilar={(m) => {
+        setSelectedMovie(m);
+      }}
+        />
       ) : null}
     </div>
   );
