@@ -28,14 +28,14 @@ public class SeriesController : ControllerBase
     [HttpGet("popular")]
     public async Task<IActionResult> GetPopular()
     {
-        var series = await _mongo.Series.Find(s => s.Category == "popular").ToListAsync();
+        var series = await _mongo.Series.Find(s => s.Category == "popular"  && !s.IsKidsContent).ToListAsync();
         return Ok(series);
     }
 
     [HttpGet("toprated")]
     public async Task<IActionResult> GetTopRated()
     {
-        var series = await _mongo.Series.Find(s => s.Category == "top_rated").ToListAsync();
+        var series = await _mongo.Series.Find(s => s.Category == "top_rated"  && !s.IsKidsContent).ToListAsync();
         return Ok(series);
     }
 

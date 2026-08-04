@@ -116,7 +116,7 @@ function Home() {
     <div className="app">
       <header className="navbar">
         <div className="navbar-left">
-          <Link to="/" className="logo">NETFLIX</Link>
+          <Link to="/home" className="logo">NETFLIX</Link>
           <ul className="nav-links">
             <li><Link to="/home" className="nav-link-active">Home</Link></li>
             <li><Link to="/series">Series</Link></li>
@@ -208,15 +208,28 @@ function Home() {
                   <span className="profile-dropdown-name">{activeProfile ? activeProfile.name : user.name}</span>
                 </div>
                 <hr />
-                <button
-                  className="profile-dropdown-switch"
-                  onClick={() => navigate("/whos-watching")}
-                >
-                  Switch Profiles
-                </button>
-                <button className="profile-dropdown-signout" onClick={handleLogout}>
-                  Sign Out of Netflix
-                </button>
+<button
+  className="profile-dropdown-switch"
+  onClick={() => navigate("/whos-watching")}
+>
+  Switch Profiles
+</button>
+<button
+  className="profile-dropdown-switch"
+  onClick={() => navigate("/account")}
+>
+  Account
+</button>
+<button
+  className="profile-dropdown-switch"
+  onClick={() => alert("Help Centre coming soon!")}
+>
+  Help Centre
+</button>
+<hr />
+<button className="profile-dropdown-signout" onClick={handleLogout}>
+  Sign Out of Netflix
+</button>
               </div>
             )}
           </div>
@@ -271,18 +284,10 @@ function Home() {
       </main>
 
       <footer className="home-footer">
-        <div className="home-footer-links">
-          <a href="#">FAQ</a>
-          <a href="#">Help Centre</a>
-          <a href="#">Account</a>
-          <a href="#">Media Centre</a>
-          <a href="#">Terms of Use</a>
-          <a href="#">Privacy</a>
-        </div>
-        <div className="home-footer-bottom">
-          <p>Netflix Clone (c) 2026</p>
-        </div>
-      </footer>
+  <div className="home-footer-bottom">
+    <p>Netflix Clone © 2026</p>
+  </div>
+</footer>
 
       {selectedMovie ? (
         <MovieModal
