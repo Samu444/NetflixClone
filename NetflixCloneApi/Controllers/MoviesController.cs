@@ -28,14 +28,14 @@ public class MoviesController : ControllerBase
     [HttpGet("popular")]
     public async Task<IActionResult> GetPopular()
     {
-        var movies = await _mongo.Movies.Find(m => m.Category == "popular").ToListAsync();
+        var movies = await _mongo.Movies.Find(m => m.Category == "popular"  && !m.IsKidsContent).ToListAsync();
         return Ok(movies);
     }
 
     [HttpGet("toprated")]
     public async Task<IActionResult> GetTopRated()
     {
-        var movies = await _mongo.Movies.Find(m => m.Category == "top_rated").ToListAsync();
+        var movies = await _mongo.Movies.Find(m => m.Category == "top_rated"  && !m.IsKidsContent).ToListAsync();
         return Ok(movies);
     }
 

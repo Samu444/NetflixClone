@@ -2,16 +2,15 @@
 
 /* The card container */
 .movie-card {
-  width: 160px;               /* Fixed width — all cards are the same size */
-  flex-shrink: 0;             /* Prevents the card from squishing in a row */
-  border-radius: 8px;         /* Rounds the corners — 8px is a subtle rounding */
-  overflow: hidden;           /* Hides anything that goes outside the rounded corners */
-  background-color: #1a1a1a;  /* Slightly lighter than the page — dark card colour */
-  cursor: pointer;            /* Shows a hand cursor when hovering — feels clickable */
-
-  /* transition tells the browser to animate any property changes smoothly */
-  /* "transform 0.2s" means: animate the transform property over 0.2 seconds */
+  width: 160px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #1a1a1a;
+  cursor: pointer;
   transition: transform 0.2s;
+  display: flex;
+  flex-direction: column;
 }
 
 /* The hover effect — this runs when the user moves their mouse over the card */
@@ -23,26 +22,35 @@
 
 /* The poster image inside the card */
 .movie-card img {
-  width: 100%;       /* Image fills the full width of the card */
-  display: block;    /* Removes a small gap that appears under images by default */
+  width: 100%;
+  height: 220px;         /* Fixed height forces every poster to the same size */
+  object-fit: cover;     /* Crops the image to fill the box without distorting it */
+  display: block;
 }
 
 /* The title text */
 .movie-title {
   color: white;
   font-size: 14px;
-  font-weight: 500;               /* Medium weight — not too thin, not too bold */
-  padding: 8px 8px 4px 8px;      /* top right bottom left — space inside the element */
-  margin: 0;                      /* Remove default paragraph spacing */
+  font-weight: 500;
+  padding: 8px 8px 4px 8px;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* long titles get cut off with "..." instead of wrapping */
 }
 
 /* The genre label */
 .movie-genre {
-  color: #aaaaaa;             /* Light grey — less prominent than the title */
-  font-size: 12px;            /* Smaller than the title */
-  padding: 0px 8px 8px 8px;  /* No top padding (sits under title), 8px on other sides */
+  color: #aaaaaa;
+  font-size: 12px;
+  padding: 0px 8px 8px 8px;
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
 .star-rating {
   display: flex;
   align-items: center;

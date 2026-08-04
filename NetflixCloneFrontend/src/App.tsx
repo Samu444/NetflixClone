@@ -13,6 +13,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import WhosWatching from "./pages/WhosWatching";
 import ManageProfiles from "./pages/ManageProfiles";
 import RequireProfile from "./components/RequireProfile";
+import Account from "./pages/Account";
 
 function App() {
   return (
@@ -79,6 +80,14 @@ function App() {
     </ProtectedRoute>
   }
 />
+<Route
+  path="/account"
+  element={
+    <ProtectedRoute>
+      <Account />
+    </ProtectedRoute>
+  }
+/>
       <Route
   path="/movies"
   element={
@@ -89,6 +98,7 @@ function App() {
     </ProtectedRoute>
   }
 />
+
 
     </Routes>
   );

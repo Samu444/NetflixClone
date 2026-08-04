@@ -175,14 +175,7 @@ body {
   border-top: 1px solid #333;
   padding: 40px 50px;
   color: #737373;
-}
-
-.home-footer-links {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  max-width: 700px;
-  margin-bottom: 24px;
+  text-align: center;
 }
 
 .home-footer-links a {
@@ -196,8 +189,11 @@ body {
 }
 
 .home-footer-bottom {
-  font-size: 0.85rem;
-  margin-top: 16px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #b3b3b3;
+  padding: 20px 0;
 }
 
 .watch-content {
