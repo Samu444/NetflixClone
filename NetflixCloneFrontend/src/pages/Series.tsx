@@ -191,7 +191,7 @@ function SeriesPage() {
 </button>
 <button
   className="profile-dropdown-switch"
-  onClick={() => alert("Help Centre coming soon!")}
+  onClick={() => navigate("/help-centre")}
 >
   Help Centre
 </button>
@@ -267,6 +267,7 @@ function SeriesPage() {
     movie={toMovieShape(selectedSeries)}
     onClose={() => setSelectedSeries(null)}
     isSeries={true}
+    isKidsProfile={isKidsProfile}
     onSelectSimilar={(m) => {
       const match = [...popular, ...topRated].find((s) => s.id === m.id);
       if (match) setSelectedSeries(match);

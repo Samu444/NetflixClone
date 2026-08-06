@@ -14,6 +14,7 @@ import WhosWatching from "./pages/WhosWatching";
 import ManageProfiles from "./pages/ManageProfiles";
 import RequireProfile from "./components/RequireProfile";
 import Account from "./pages/Account";
+import HelpCentre from "./pages/HelpCentre";
 
 function App() {
   return (
@@ -85,6 +86,16 @@ function App() {
   element={
     <ProtectedRoute>
       <Account />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/help-centre"
+  element={
+    <ProtectedRoute>
+      <RequireProfile>
+        <HelpCentre />
+      </RequireProfile>
     </ProtectedRoute>
   }
 />

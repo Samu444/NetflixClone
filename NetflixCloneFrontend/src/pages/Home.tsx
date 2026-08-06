@@ -222,7 +222,7 @@ function Home() {
 </button>
 <button
   className="profile-dropdown-switch"
-  onClick={() => alert("Help Centre coming soon!")}
+  onClick={() => navigate("/help-centre")}
 >
   Help Centre
 </button>
@@ -294,6 +294,7 @@ function Home() {
           movie={selectedMovie}
           onClose={() => setSelectedMovie(null)}
           isSeries={selectedIsSeries}
+          isKidsProfile={isKidsProfile}
           onSelectSimilar={(m, isSeriesType) => {
            setSelectedMovie(m);
            setSelectedIsSeries(isSeriesType);
