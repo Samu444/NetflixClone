@@ -7,6 +7,7 @@ interface MovieModalProps {
   movie: Movie;
   onClose: () => void;
   isSeries?: boolean;
+  isKidsProfile?: boolean;
   onSelectSimilar?: (movie: Movie, isSeries: boolean) => void;
 }
 
@@ -17,7 +18,7 @@ function formatRuntime(minutes?: number): string {
   return h > 0 ? `${h}h ${m}m` : `${m}m`;
 }
 
-function MovieModal({ movie, onClose, isSeries = false, onSelectSimilar }: MovieModalProps) {
+function MovieModal({ movie, onClose, isSeries = false, isKidsProfile = false, onSelectSimilar }: MovieModalProps) {
   const navigate = useNavigate();
   const [similar, setSimilar] = useState<Movie[]>([]);
 
@@ -27,17 +28,19 @@ function MovieModal({ movie, onClose, isSeries = false, onSelectSimilar }: Movie
     : formatRuntime(movie.runtime);
 
   useEffect(() => {
-    const base = isSeries ? "/api/series" : "/api/movies";
-    const endpoint = movie.category === "top_rated" ? "toprated" : "popular";
+  const base = isSeries ? "/api/series" : "/api/movies";
+  const endpoint = isKidsProfile
+    ? "kids"
+    : (movie.category === "top_rated" ? "toprated" : "popular");
 
-    fetch(`http://localhost:5145${base}/${endpoint}`)
-      .then((res) => res.json())
-      .then((data: Movie[]) => {
-        const filtered = data.filter((m) => m.id !== movie.id).slice(0, 6);
-        setSimilar(filtered);
-      })
-      .catch(() => setSimilar([]));
-  }, [movie.id, movie.category, isSeries]);
+  fetch(`http://localhost:5145${base}/${endpoint}`)
+    .then((res) => res.json())
+    .then((data: Movie[]) => {
+      const filtered = data.filter((m) => m.id !== movie.id).slice(0, 6);
+      setSimilar(filtered);
+    })
+    .catch(() => setSimilar([]));
+}, [movie.id, movie.category, isSeries, isKidsProfile]);
 
   const handleSimilarClick = (m: Movie) => {
     if (onSelectSimilar) {

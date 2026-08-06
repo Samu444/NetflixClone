@@ -165,7 +165,7 @@ function Movies() {
 </button>
 <button
   className="profile-dropdown-switch"
-  onClick={() => alert("Help Centre coming soon!")}
+  onClick={() => navigate("/help-centre")}
 >
   Help Centre
 </button>
@@ -231,6 +231,7 @@ function Movies() {
       {selectedMovie ? (
         <MovieModal 
         movie={selectedMovie} 
+        isKidsProfile={isKidsProfile}
         onClose={() => setSelectedMovie(null)} 
         onSelectSimilar={(m) => {
         setSelectedMovie(m);
